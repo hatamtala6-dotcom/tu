@@ -1,0 +1,27 @@
+name: Unzip ZIP file
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install unzip
+        run: sudo apt-get install unzip -y
+
+      - name: Unzip file
+        run: unzip turkiye-worker-bot.zip -d extracted_files
+
+      - name: Commit extracted files
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add extracted_files
+          git commit -m "Auto unzip files" || echo "No changes to commit"
+          git push
